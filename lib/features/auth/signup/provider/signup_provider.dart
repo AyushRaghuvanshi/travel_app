@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:travel/features/home/screens/home_screen.dart';
 import 'package:travel/repositories/firebase/firebase_auth.dart';
 import 'package:travel/utils/helpers/base_provider.dart';
 
@@ -25,21 +26,34 @@ class SignupProvider extends BaseViewModel {
     }
   }
 
-    signup(String email, String password, BuildContext context) async {
+  googleSignin(BuildContext context) async {
+    try {
+      final user = await auth.signInWithGoogle();
+      if (user != null) {
+        Navigator.pushAndRemoveUntil(context,
+            MaterialPageRoute(builder: (_) => HomeScreen()), (route) => false);
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  signup(String email, String password, BuildContext context) async {
     try {
       setLoading(true);
       if (verifyEmail(email) != null && verifyPassword(password) != null) {
         return;
       }
       await auth.signup(email, password);
+      Navigator.pushAndRemoveUntil(context,
+          MaterialPageRoute(builder: (_) => HomeScreen()), (route) => false);
       setLoading(false);
     } catch (e) {
-     
       if (context.mounted) {
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text(e.toString())));
       }
-       setLoading(false);
+      setLoading(false);
     }
   }
 }

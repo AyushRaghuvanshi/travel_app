@@ -36,6 +36,19 @@ class LoginScreen extends StatelessWidget {
                 labelText: 'Password',
                 validator: (v) => provider.verifyPassword(v ?? ""),
               ),
+
+              Box.box24h,
+              PrimaryButton(
+                  label: 'Google Sign-In',
+                  isLoading: provider.isLoading,
+                  onTap: () {
+                    try {
+                      provider.googleSignin(context);
+                    } catch (e) {
+                      ScaffoldMessenger.of(context)
+                          .showSnackBar(SnackBar(content: Text(e.toString())));
+                    }
+                  }),
               Box.box24h,
               PrimaryButton(
                   label: 'Login',

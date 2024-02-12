@@ -65,6 +65,18 @@ class SignupScreen extends StatelessWidget {
                     }
                   }),
               Box.box24h,
+              PrimaryButton(
+                  label: 'Google Sign-In',
+                  isLoading: provider.isLoading,
+                  onTap: () {
+                    try {
+                      provider.googleSignin(context);
+                    } catch (e) {
+                      ScaffoldMessenger.of(context)
+                          .showSnackBar(SnackBar(content: Text(e.toString())));
+                    }
+                  }),
+              Box.box24h,
               const Text(
                 "Already Have An Account?",
                 style: TT.f16w400,
